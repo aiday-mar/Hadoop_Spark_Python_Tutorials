@@ -6,5 +6,10 @@ In the following I have followed the following tutorial on LinkedIn Learning: ht
 
 # Notes
 
-Hadoop uses HDFS (Hadoop Distributed File Systems). HBase is a NoSQL database.
+Hadoop uses HDFS (Hadoop Distributed File Systems). HBase is a NoSQL database. The CAP theorem displays three properties that need to be satisfied by databases : Consistency, Availability, Partitioning. These can be understood as the concept of being able to perform transations, be able to access data, perform distributed processing and scale up the database storage.
 
+Hadoop consists of two components and a project : it has an open-source data storage interface HDFS and a processing API called MapReduce. HBase is a library used to display data in a more intuitive way. It has a wide column system meaning that a column can contain different types of data and different amounts of data.
+
+# Hadoop Core Components
+
+Hadoop processes run in separate Java Virtual Machines.
