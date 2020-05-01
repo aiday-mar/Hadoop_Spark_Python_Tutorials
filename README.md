@@ -13,3 +13,5 @@ Hadoop consists of two components and a project : it has an open-source data sto
 # Hadoop Core Components
 
 Hadoop processes run in separate Java Virtual Machines. The way the framework works is that the client job is sent to the job tracker, which distributes this into portions, each portion sent to a task tracker which further divides the job to task trackers. This part is coded with the MapReduce. The following is a picture depicting the different components of Hadoop.
+
+<img src="https://github.com/aiday-mar/Images/blob/master/Apache_Hadoop_Ecosystem.JPG?raw=true" width = "700">
