@@ -43,4 +43,13 @@ publis static class Map extends MapReduceBase
   implements Mapper<LongWritable, Text, Text, IntWritable> {
   private final static IntWritable one = new IntWritable(1); // here this is the key
   private Text word = new Text();
+  
+  public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) // here we have the key, value pair as well as in the ouput a list of the words followed by the amount of times the word appears
+    throws IOException {
+      String line = value.toString();
+      StringTokenizer tokenizer = new StringTokenizer(line);
+      while (tokenizer.hasMoreTokens()){
+        word.set(tokenizer.nextToken());
+        output.collect(word,one); // you add to the output the specific word and that it appeared once.
+      }
 ```
