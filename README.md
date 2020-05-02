@@ -201,3 +201,29 @@ AS word from myinput) words
 GROUP BY word
 ORDER BY count DESC, word ASC;
 ```
+
+# Pig
+
+Pig is an ETL (Extract,Transform,Load) library for Hadoop. There are concepts like fields, tuples, bags and relations. The ETL process can be written as :
+
+```
+LOAD <file>
+FILTER <set> BY <value>=<number>, JOIN, GROUP BY, FOREACH, GENERATE <values>
+DUMP <to screen for testing>
+STORE <new file>
+```
+
+The word count example using Pig can be written as follows : 
+
+```
+lines = LOAD '/user/hadoop/HDFS_File.txt' AS (line:chararray);
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word;
+grouped = GROUP words by word;
+wordcount = FOREACH grouped GENERATE group, COUNT(words);
+DUMP wordcount;
+```
+Above we generate a group and count the number of words and dump the words. Here above the reducer is generated in the `wordcount` and the mapper is generated in the `words` and `grouped`.
+
+# Oozie, Sqoop, ZooKeeper
+
+Oozie is a Workflow scheduler library for Hadoop jobs.
