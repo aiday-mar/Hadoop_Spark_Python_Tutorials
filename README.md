@@ -226,4 +226,51 @@ Above we generate a group and count the number of words and dump the words. Here
 
 # Oozie, Sqoop, ZooKeeper
 
-Oozie is a Workflow scheduler library for Hadoop jobs.
+Oozie is a Workflow scheduler library for Hadoop jobs. Sqoop is a command line utility for transferring data between RDBMS systems and Hadoop. There are connectors for Oracle, SQL Server and other services. This data can be loaded into Hive or HBase. The Sqoop syntax is as so : 
+
+```
+sqoop import
+  --connect <JDBC connection string>
+  --table <tablename>
+  --username <username>
+  --password <password>
+    --hive-import
+```
+
+You can optimize Sqoop with direct dump. Zookeeper is a centralized service for Hadoop configuration information. It is used for distributed in-memory computation. 
+
+# Spark
+
+Spark is a framework built on top of Hadoop that runs faster than Hadoop. An example code is the following : 
+
+```
+public final class CalcPi{
+  public static void main(String[] args) throws Exception {
+    SparkSession spark = SparkSession.builder().appName("JavaSparkPi").getOrCreate();
+    
+    JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
+    
+    // in the below we are parsing 
+    int slices = (args.length == 1) ? Integer.parseInt(args[0]) : 2; //outputing either the one character of the args or having 2 slices
+    
+    int n= 10000*slices;
+    List<Integer> l = new ArrayList<>(n) // new array list containing integers of size n
+    for (int i=0; i < n; i ++) {
+      l.add(i); // meaning that here we are adding i to the end of the array and we are starting with 0
+    }
+    
+    JavaRDD<Integer> dataSet = jsc.parallelize(l, slices); //running in parallel
+    
+    // below performing the work to find the digits of Pi
+    int count = dataSet.map(integer -> {
+      double x = Math.random()*2 - 1;
+      double y = Math.random()*2 - 1;
+      return (x*x + y*y <= 1) ? 1: 0;
+    }).reduce((integer, integer2) -> integer + integer2);
+    
+    System.out.println("Pi is roughly " + 4.0*count/n);
+    
+    spark.stop();
+  }
+}
+```
