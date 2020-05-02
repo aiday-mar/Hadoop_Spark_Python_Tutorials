@@ -146,4 +146,58 @@ public static void main(String[] args) throws Exception {
   job.waitForCompletion(true);
 }
 ```
+In the map class you may add more variables such as the following ones :
 
+```
+private boolean caseSensitive = true;
+private Set<String> patternsToSkip = new HashSet<String>();
+```
+You can set up a distributed cache which asks the mapper to place specific files on the map node (such as lookup files, translation files). The corresponding Distributed Cach File is :
+
+```
+public void configure(JobConf job) {
+  caseSensitive = job.getBoolean("wordcount.case.sensitive", true);
+  inputFile = job.get("map.input.file");
+  if(job.getBoolean("wordcount.skip.patterns", false)){
+    Path[] patternsFile = new Path[0];
+    try{
+      patternsFiles = DistributedCache.getLocalCacheFiles(job);
+    } catch(IOException ioe) {
+      System.err.println("Caught exception while getting cached files:" + StringUtils.stringifyException(ioe));
+    } for (Path patternsFile : patternsFiles){
+      parseSkipFile(patternsFile);
+    }
+  }
+}
+```
+
+The utility method, parseSkipFile, is defined below :
+
+```
+private void parseSkipFile(Path patternsFile) {
+  try{
+    BufferedReader fis = new BufferedReader(new FileReader(patternsFile.toString()));
+    String pattern = null;
+    while ((pattern = fis.readLine()) != null) {
+      patternsToSkip.add(pattern);
+    }
+  } catch (IOException ioe) {
+    System.err.println("caught exception while parsing the cached file" + patternsFile + " : " + StringUtils.stringifyException(ioe);
+  }
+}
+```
+
+# Hive
+
+Hive libraries are integrated with HBase, they include the HQL language. It is an SQL-lire query language that produces MapReduce code. Here the same example above is written using Hive :
+
+```
+CREATE TABLE wordcount AS
+SELECT word, count(1) AS count
+FROM (SELECT EXPLODE(SPLIT(LCASE
+  (REGEXP_REPLACE
+    (line, '[\\p{Punct}, \\p{Cntrl}]', '')),' '))
+AS word from myinput) words
+GROUP BY word
+ORDER BY count DESC, word ASC;
+```
