@@ -39,7 +39,7 @@ The last part of the commmand above selects the last 50 lines. We use a jar file
 The map code is below :
 
 ```
-publis static class Map extends MapReduceBase
+public static class Map extends MapReduceBase
   implements Mapper<LongWritable, Text, Text, IntWritable> {
   private final static IntWritable one = new IntWritable(1); // here this is the key
   private Text word = new Text();
@@ -52,4 +52,19 @@ publis static class Map extends MapReduceBase
         word.set(tokenizer.nextToken());
         output.collect(word,one); // you add to the output the specific word and that it appeared once.
       }
+```
+
+The reduce code is below :
+
+```
+public static class Reduce extends MapReduceBase
+  implements Reducer<Text, IntWritable, Text, IntWritable>{
+    public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
+      int sum=0;
+      while (values.hasNext()) { // where here we have next in the iterator
+        sum += values.next().get();
+      }
+      output.collect(key, new IntWritable(sum)); // here we output the word and the given times it appears in the play
+    }
+  }
 ```
