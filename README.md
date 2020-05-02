@@ -274,3 +274,4 @@ public final class CalcPi{
   }
 }
 ```
+Hadoop now runs more on public cloud data lakes. Some visualization libraries are Ganglia or Tableau.
