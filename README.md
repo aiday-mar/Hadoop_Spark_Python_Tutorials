@@ -35,3 +35,11 @@ You can run Hadoop in IDE like Eclipse, or in the command line. Now let's see th
 The last part of the commmand above selects the last 50 lines. We use a jar file and run it on GDP dataproc. You can submit a job to the cluster in dataproc by specifying the job as a hadoop, specifying where the source is and the output location should be. Then in dataproc you can download the data and see the wordcount. We can visualize the Map Reduce code for the word count example as follows:
 
 <img src="https://github.com/aiday-mar/Images/blob/master/Map_Reduce_Example.JPG?raw=true" width = "500">
+
+The map code is below :
+
+`publis static class Map extends MapReduceBase
+$~$ implements Mapper<LongWritable, Text, Text, IntWritable> {
+$~~$ private final static IntWritable one = new IntWritable(1); // here this is the key
+$~~$ private Text word = new Text();
+`
