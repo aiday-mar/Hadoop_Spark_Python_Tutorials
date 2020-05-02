@@ -68,3 +68,23 @@ public static class Reduce extends MapReduceBase
     }
   }
 ```
+
+Now we need a main class :
+
+```
+public static void main(String[] args) throws Exception {
+  JobConf conf = new JobConf(WordCount.class);
+  conf.setJobName("wordCount");
+  conf.setOutputKeyClass(Text.class);
+  conf.setOutputValueClass(IntWritable.class);
+  conf.setMapperClass(Map.class);
+  conf.setCombinerClass(Reduce.class);
+  conf.setReducerClass(Reduce.class);
+  conf.setInputFormat(TextInputFormat.class);
+  FileInputFormat.setInputPaths(conf, new Path(args[0]));
+  FileOutputFormat.setOutputPaths(conf, new Path(args[1]));
+  JobClient.runJob(conf);
+}
+```
+
+The key components are the mapper, the reducer, the partitioner, the reporter and the output collector.
