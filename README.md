@@ -88,3 +88,62 @@ public static void main(String[] args) throws Exception {
 ```
 
 The key components are the mapper, the reducer, the partitioner, the reporter and the output collector.
+
+# MapReduce 2.0
+
+MapReduce only has batch processing, but was slow. Missing security and availability. YARN adds an abstraction layer between HDFS and Map Reduce. Now it is possible for real-time processing. It supports security scenarios too. Let's code the word dount example.
+
+```
+public static class Map extends Mapper
+  implements Mapper<LongWritable, Text, Text, IntWritable> {
+  private final static IntWritable one = new IntWritable(1); // here this is the key
+  private Text word = new Text();
+  
+  public void map(LongWritable key, Text value, Context context) // Here the context contains some data 
+    throws IOException {
+      String line = value.toString();
+      StringTokenizer tokenizer = new StringTokenizer(line);
+      while (tokenizer.hasMoreTokens()){
+        word.set(tokenizer.nextToken());
+        context.write(word, one);
+      }
+   }
+}
+```
+
+The reducer class is :
+
+```
+public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable>{
+    public void reduce(Text key, Iterator<IntWritable> values, Context context) throws IOException {
+      int sum=0;
+      while (values.hasNext()) { // where here we have next in the iterator
+        sum += values.next().get();
+      }
+      context.write(key, new IntWritable(sum)); // here we use the context
+    }
+  }
+```
+The main changes are in the job runner class as follows :
+
+```
+public static void main(String[] args) throws Exception {
+  Configuration conf = new Configuration();
+  Job job = new Job(conf, "wordcount");
+  
+  job.setOutputKeyClass(Text.class);
+  job.setOutputValueClass(IntWritable.class);
+  
+  job.setMapperClass(Map.class);
+  job.setReducerClass(Reduce.class);
+  
+  job.setInputFormatClass(TextInputFormat.class);
+  job.setOutputFormatClass(TextOutputFormat.class);
+  
+  FileInputFormat.addInputPath(job, new Path(args[0]));
+  FileOutputFormat.setOutputPath(job, new Path(args[1]));
+  
+  job.waitForCompletion(true);
+}
+```
+
