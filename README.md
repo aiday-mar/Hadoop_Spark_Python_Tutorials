@@ -38,8 +38,9 @@ The last part of the commmand above selects the last 50 lines. We use a jar file
 
 The map code is below :
 
-`publis static class Map extends MapReduceBase
-$~$ implements Mapper<LongWritable, Text, Text, IntWritable> {
-$~~$ private final static IntWritable one = new IntWritable(1); // here this is the key
-$~~$ private Text word = new Text();
-`
+```
+publis static class Map extends MapReduceBase
+  implements Mapper<LongWritable, Text, Text, IntWritable> {
+  private final static IntWritable one = new IntWritable(1); // here this is the key
+  private Text word = new Text();
+```
