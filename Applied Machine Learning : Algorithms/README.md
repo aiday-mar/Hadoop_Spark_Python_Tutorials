@@ -76,4 +76,4 @@ cv.fit(tr_features, tr_labels.values.ravel())
 cv.best_estimator_
 ```
 
-A support vector machine is a classifier that finds an optimal hyperplane that maximizes the margin between two classes.
+A support vector machine is a classifier that finds an optimal hyperplane that maximizes the margin between two classes. The kernel trick transforms data that is not linearly separable in an n-dimensional space to a higher dimension where it is linearly separable.
