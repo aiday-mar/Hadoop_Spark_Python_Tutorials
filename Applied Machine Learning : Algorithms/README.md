@@ -76,4 +76,39 @@ cv.fit(tr_features, tr_labels.values.ravel())
 cv.best_estimator_
 ```
 
-A support vector machine is a classifier that finds an optimal hyperplane that maximizes the margin between two classes. The kernel trick transforms data that is not linearly separable in an n-dimensional space to a higher dimension where it is linearly separable.
+A support vector machine is a classifier that finds an optimal hyperplane that maximizes the margin between two classes. The kernel trick transforms data that is not linearly separable in an n-dimensional space to a higher dimension where it is linearly separable. The C hyperparameter is a pernalty term that determines how close the model fits to the training set.
+
+A multilayer perceptron is a classic feed-forward artificial neural network, the core component of deep learning. It is a connected series of nodes where each node represents a function or a model. The hidden layer-size hyperparameter determines how many hidden layers there will be and how many nodes in each layer. The activation function hyperparameter dictates the type of nonlinearity that is introduced in the model. The learning rate hyperparameter facilitates both how quickly and whether or not the algorithm will find the optimal solution. 
+
+```
+mlp = MLPClassifier()
+parameters = {
+  'hidden_layer_sizes' : [],
+  'activation' : [],
+  'learning_rate' : []
+}
+
+cv = GridSearchCV(mlp, parameters, cv=5)
+cv.fit(tr_features, tr_labels,.values.ravel())
+
+cv.best_estimator_
+```
+
+A random forest merges a collection of independent decision trees to get a more accurate and stable prediction. It is a type of ensemble methods. An ensemle method combines several machine learning models in order to decrease both bias and variance. The n_estimators hyperparameter controls how many individual decision trees will be built. The max_depth hyperparameter control how deep each individual decision tree can go.
+
+```
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+
+rf = RandomForestClassifier()
+parameters = {
+  'n_estimators' : [5, 50, 250]
+  'max_depth' : [2, 4, 8, 16, 32, none]
+}
+
+cv = GridSearchCV(rf, parameters, cv=5)
+cv.fit(tr_features, tr_labels.values.ravel())
+
+joblib.dump(cv.best_estimator_,  '../../../')
+```
+
+Boosting is an ensemble method that aggregates a number of weak models to create one strong model. A weak model is one that is only slightly better than random guessing. A strong model is one that is strongly correlated with the true classification. 
